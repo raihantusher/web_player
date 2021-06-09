@@ -329,7 +329,7 @@ class RTinfo extends AudioInfo {
     	$detail = $this->info($file);
 
     	//return $this->playtime($detail["playing_time"])." ".$this->bitrate($detail["avg_bit_rate"])." ".$this->size($detail['filesize']).' '.$detail["format_name"];
-    	return $this->playtime($detail["playing_time"])." ".$this->size($detail['filesize']).' '.$detail["format_name"];
+    	return $this->playtime($detail["playing_time"]).", ".$this->size($detail['filesize']).' '.$detail["format_name"];
 
     }
 

@@ -8,10 +8,10 @@ function remove_dots($str)
 		if($num==1)
 			return $str;
 		else
-			return $str=str_replace("/.","",$str,$num);
+			return $str = str_replace("/.","",$str,$num);
 	}
 
-$exclude=$config["exclude"];
+$exclude = $config["exclude"];
 //https://stackoverflow.com/questions/20264737/php-list-directory-structure-and-exclude-some-directories
 	$filter = function ($file, $key, $iterator) use ($exclude) {
 	    if ($iterator->hasChildren() && !in_array($file->getFilename(), $exclude)) {
@@ -31,11 +31,11 @@ $iterator = new \RecursiveIteratorIterator(
 
 $files = [];
 
-$dirs =[];
+$dirs = [];
 
-$q=$_GET['q'];
+$q = $_GET['q'];
 
-$id=1;
+$id = 1;
 foreach ($iterator as $info)
 	 {
 
@@ -56,7 +56,7 @@ foreach ($iterator as $info)
 
 					$fi = new FilesystemIterator($c, FilesystemIterator::SKIP_DOTS);
 					//$dir[]=["name"=>"Raihan"];
-					$dirs=array_unique($dirs,SORT_REGULAR);
+					$dirs = array_unique($dirs,SORT_REGULAR);
 					$dirs[]=
 						[
 							"id"=>$id,
@@ -112,6 +112,15 @@ if( strcmp($_GET["type"],"file")==0)
 		$json=array_merge($folders,$files);
 	}
 
-
+	array_walk_recursive(
+		$json,
+		function (&$entry) {
+		  $entry = mb_convert_encoding(
+			  $entry,
+			  'UTF-8'
+		  );
+		}
+	  );
 $json=json_encode($json);
+header('Content-Type: application/json');
 echo $json;

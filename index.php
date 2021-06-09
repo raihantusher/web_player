@@ -275,7 +275,6 @@ $( document ).ready(function() {
     .done(function(response){
       // contents are combination for folder and file sorted
        let contents = [];
-       console.log(response);
 
        // hold list of files
        let files = [];
@@ -310,8 +309,8 @@ $( document ).ready(function() {
         }
         else{
           // start
-                 console.log(response);
-                  data = JSON.parse(response);
+          
+                  data = response;
                   data = _.uniqBy(data, 'loc');
 
 
@@ -335,7 +334,7 @@ $( document ).ready(function() {
                   // combile file and folder list and assign into content
                   contents=[...files,...folders];
                   //contents=_.uniqBy(contents,'loc');
-
+                  console.log(files);
                   if (contents.length == 0) { 
                     table.append(
                                 '<tr>'

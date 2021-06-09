@@ -1,8 +1,5 @@
 <?php
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-
 include "libs/audioInfo.php";
 
 $audio = new RTinfo();
@@ -56,7 +53,7 @@ $content = []; // all file and folder list
 for($i=0; $i<$len; $i++) {
 
 	$content_name = $list[$i]; // name assigned from file and folder name
-	$current_content_location = $temp_dir.'\\'.$content_name;  // we need to get content location also
+	$current_content_location = $temp_dir.DIRECTORY_SEPARATOR.$content_name;  // we need to get content location also
 
 	if(is_dir($current_content_location)){
 		//bellow $fi to get file numbers
@@ -89,13 +86,28 @@ for($i=0; $i<$len; $i++) {
 //header("Set-Cookie", "SameSite=None");
 //print_r($content);
 
-if($detect_search == 1){
+if($detect_search == 1) {
+	
    require "libs/dir-tree.php";
 }
 else if(isset($_GET["file"])){
 	$actual_link = "http://$_SERVER[HTTP_HOST]";
 	echo $config["current_url"].'/'.$_GET["file"];
 } else {
-	//header('Content-Type: application/json');
+	
+	/**
+	 * bellow procedure converts
+	 * content array values into utf-8
+	 */
+	array_walk_recursive(
+		$content,
+		function (&$entry) {
+		  $entry = mb_convert_encoding(
+			  $entry,
+			  'UTF-8'
+		  );
+		}
+	  );
+	  header('Content-Type: application/json');
 	echo json_encode($content);
 }
