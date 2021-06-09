@@ -1,54 +1,60 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require "config.php";
 
 // empty breadcrumbs or declaration of breadcurmbs
-$breadcrumbs = [];
+$breadcrumbs=[];
 // empty dirs or declr of dirs
-$dirs = [];
+$dirs=[];
 
 // if file exists in url then
-if (isset($_GET['file'])) {
-   $dirs = explode('/', $_GET['file']);
+if (isset($_GET['file'])){
+   $dirs=explode('/',$_GET['file']);
 } // if dir exist in url
-else if(isset($_GET['dir'])) {
-  $dirs = explode('/',$_GET['dir']);
+else if(isset($_GET['dir'])){
+  $dirs=explode('/',$_GET['dir']);
 //  $dirs=array_pop($dirs);
 }else{
   // if noting is found then default config
-  $dirs = [$config["dir"]];
+  $dirs=[$config["dir"]];
 }
 
 
 $len = count($dirs);
 
-$url = $config["dir"];
+$url=$config["dir"];
 
   $breadcrumbs[]=[
-    "url" => $config["dir"],
-    "name" => "Home",
-    "status" => ""
+    "url"=>$config["dir"],
+    "name"=>"Home",
+    "status"=>""
   ];
 
     for ($i=1;$i<$len;$i++){
 
-      $url .= '/'.$dirs[$i];
+      $url.='/'.$dirs[$i];
 
 
       $breadcrumbs[]=[
-        "url" => $url,
-        "name" => $dirs[$i],
-        "status" => ""
+        "url"=>$url,
+        "name"=>$dirs[$i],
+        "status"=>""
       ];
     }
 
 
 
 
-$breadcrumbs[$len-1]["status"] = "active";
+$breadcrumbs[$len-1]["status"]="active";
 
-if ($dirs[0] == ".." || $dirs[1] == "..")
+/*
+if($dirs[0]==".." || $dirs[1]=="..")
   die("Suspicious activity!!");
+  */
 ?>
 
 
@@ -63,7 +69,7 @@ if ($dirs[0] == ".." || $dirs[1] == "..")
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title><?= (($len>1) ? $dirs[$len-1] : 'Home')?> | Alhidaaya.Com</title>
+        <title><?=(($len>1)?$dirs[$len-1]:'Home')?> | Alhidaaya.Com</title>
 
      <!-- Bootstrap CSS -->
     <!-- Bootstrap CSS -->
@@ -72,7 +78,7 @@ if ($dirs[0] == ".." || $dirs[1] == "..")
     <link rel="stylesheet" href="./assets/css/plyr.css" />
 
     <!-- Social Media Metadata -->
-   <meta property="og:title" content="<?= (($len>1) ? $dirs[$len-1] : 'Home')?>" />
+   <meta property="og:title" content="<?=(($len>1)?$dirs[$len-1]:'Home')?>" />
    <meta property="og:type" content="article" />
 
    <meta property="og:image" content="http://www.alhidaaya.com/sw/sites/all/themes/corporateclean/images/logo.png" />
@@ -112,7 +118,7 @@ if ($dirs[0] == ".." || $dirs[1] == "..")
 <div class="container">
         <div class="row mt-5">
           <div class="col-12 text-center">
-           <a href="<?= $config['current_url']?> "> <img  class="img-fluid"src="http://www.alhidaaya.com/sw/sites/all/themes/corporateclean/images/logo.png" /></a>
+           <a href="<?=$config['current_url']?>"> <img  class="img-fluid"src="http://www.alhidaaya.com/sw/sites/all/themes/corporateclean/images/logo.png" /></a>
           </div>
         </div>
         <hr/>
@@ -145,7 +151,7 @@ if ($dirs[0] == ".." || $dirs[1] == "..")
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mr-auto" id="bcrumb">
                             <?php foreach($breadcrumbs as $bs): ?>
-                                <?php if($bs["status"]=="active") { ?>
+                                <?php if($bs["status"]=="active"){?>
                                 <li class="breadcrumb-item <?=$bs['status']?>" aria-current="page"><?=$bs['name']?></li>
                                 <?php }else { ?>
                                     <li class="breadcrumb-item" ><a href="?dir=<?=$bs['url']?>"><?=$bs['name']?></a></li>
@@ -303,8 +309,8 @@ $( document ).ready(function() {
         }
         else{
           // start
-                  data = JSON.parse(response);
-                  data = _.uniqBy(data,'loc');
+                  data=JSON.parse(response);
+                  data=_.uniqBy(data,'loc');
 
 
 
@@ -325,7 +331,7 @@ $( document ).ready(function() {
                     }
 
                   // combile file and folder list and assign into content
-                  contents=[...files, ...folders];
+                  contents=[...files,...folders];
                   //contents=_.uniqBy(contents,'loc');
 
                   if(contents.length==0){
@@ -340,9 +346,9 @@ $( document ).ready(function() {
                     //Add row
 
                     if(qs['q']==="undefined")
-                        contents[i].details = "";
+                        contents[i].details="";
 
-                    if (contents[i].type === "dir"){
+                    if (contents[i].type==="dir"){
 
                         table.append(
                               '<tr>'

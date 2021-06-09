@@ -31,36 +31,39 @@ $iterator = new \RecursiveIteratorIterator(
 
 $files = [];
 
-$dirs = [];
+$dirs =[];
 
-$q = $_GET['q'];
+$q=$_GET['q'];
 
-$id = 1;
-foreach ($iterator as $info) {
+$id=1;
+foreach ($iterator as $info)
+	 {
 
-			$c = $info->getPathname();// getPathname
-			$address = remove_dots($c); // address to build url
-			$c = str_replace("\\","/",$address);
+			$c=$info->getPathname();// getPathname
+			$address=remove_dots($c); // address to build url
+			$c=str_replace("\\","/",$address);
 
 
 
 
-			$name = explode("/",$c);// remove backslash from directory path
-			$name = end($name);
+			$name=explode("/",$c);// remove backslash from directory path
+			$name=end($name);
 
-			if (is_dir($c)) {
+			if(is_dir($c)){
 
-				if (preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/",$name,$match)) {
+				if(preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/",$name,$match))
+				{
 
 					$fi = new FilesystemIterator($c, FilesystemIterator::SKIP_DOTS);
 					//$dir[]=["name"=>"Raihan"];
-					$dirs = array_unique($dirs,SORT_REGULAR);
-					$dirs[] = [
-							"id" => $id,
-							"loc" => $c,
-							"name" => $name,
-							"type" => "dir",
-							"details" => iterator_count($fi)." Files" //count files
+					$dirs=array_unique($dirs,SORT_REGULAR);
+					$dirs[]=
+						[
+							"id"=>$id,
+							"loc"=>$c,
+							"name"=>$name,
+							"type"=>"dir",
+							"details"=>iterator_count($fi)." Files" //count files
 
 						];
 
@@ -69,39 +72,45 @@ foreach ($iterator as $info) {
 
 			if(is_file($c)){
 
-				if(preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/",$name,$match) && !in_array($name,$config["exclude"])) {
+				if(preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/",$name,$match) && !in_array($name,$config["exclude"]))
+				{
+
 					$files[]=
 						[
-							"id" =>$id,
-							"loc" =>$c,
-							"name" =>$name,
-							"type" =>"file",
-							"details" => $audio->details($c)
+							"id"=>$id,
+							"loc"=>$c,
+							"name"=>$name,
+							"type"=>"file",
+							"details"=>$audio->details($c)
 						];
 				} // preg match here
 			}
 			$id++;
-}
+	}
 
-$json = [];
+$json=[];
 
-$files = array_unique($files, SORT_REGULAR);
-$dirs = array_unique($dirs, SORT_REGULAR);
+$files=array_unique($files,SORT_REGULAR);
+$dirs=array_unique($dirs,SORT_REGULAR);
 
-$folders = array_merge($dirs, []);
+$folders=array_merge($dirs,[]);
 
-if (strcmp($_GET["type"], "folder") == 0) {
-		$json = $folders;
-}
+if( strcmp($_GET["type"],"folder")==0)
+	{
+		$json=$folders;
 
-if (strcmp($_GET["type"], "file")==0) {
-		$json = $files;
-}
+	}
+
+if( strcmp($_GET["type"],"file")==0)
+	{
+		$json=$files;
+	}
 
 
- if( strcmp($_GET["type"], "filefolder") == 0) {
-		$json = array_merge($folders,$files);
-}
+ if( strcmp($_GET["type"],"filefolder")==0)
+ 	{
+		$json=array_merge($folders,$files);
+	}
 
 
 $json=json_encode($json);
