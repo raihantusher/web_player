@@ -1,15 +1,15 @@
 <?php
-
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ALL);*/
 
 require "config.php";
 
 // empty breadcrumbs or declaration of breadcurmbs
-$breadcrumbs=[];
+$breadcrumbs = [];
 // empty dirs or declr of dirs
-$dirs=[];
+$dirs = [];
 
 // if file exists in url then
 if (isset($_GET['file'])){
@@ -26,30 +26,30 @@ else if(isset($_GET['dir'])){
 
 $len = count($dirs);
 
-$url=$config["dir"];
+$url = $config["dir"];
 
-  $breadcrumbs[]=[
-    "url"=>$config["dir"],
-    "name"=>"Home",
-    "status"=>""
+  $breadcrumbs[] = [
+    "url" => $config["dir"],
+    "name" => "Home",
+    "status" => ""
   ];
 
-    for ($i=1;$i<$len;$i++){
+    for ($i=1; $i<$len;$i++) {
 
       $url.='/'.$dirs[$i];
 
 
-      $breadcrumbs[]=[
-        "url"=>$url,
-        "name"=>$dirs[$i],
-        "status"=>""
+      $breadcrumbs[] = [
+        "url" => $url,
+        "name" => $dirs[$i],
+        "status" => ""
       ];
     }
 
 
 
 
-$breadcrumbs[$len-1]["status"]="active";
+$breadcrumbs[$len-1]["status"] = "active";
 
 /*
 if($dirs[0]==".." || $dirs[1]=="..")
@@ -69,7 +69,7 @@ if($dirs[0]==".." || $dirs[1]=="..")
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title><?=(($len>1)?$dirs[$len-1]:'Home')?> | Alhidaaya.Com</title>
+        <title><?= (($len>1) ? $dirs[$len-1] : 'Home' ) ?> | Alhidaaya.Com</title>
 
      <!-- Bootstrap CSS -->
     <!-- Bootstrap CSS -->
@@ -78,7 +78,7 @@ if($dirs[0]==".." || $dirs[1]=="..")
     <link rel="stylesheet" href="./assets/css/plyr.css" />
 
     <!-- Social Media Metadata -->
-   <meta property="og:title" content="<?=(($len>1)?$dirs[$len-1]:'Home')?>" />
+   <meta property="og:title" content="<?=(($len>1)? $dirs[$len-1]: 'Home')?>" />
    <meta property="og:type" content="article" />
 
    <meta property="og:image" content="http://www.alhidaaya.com/sw/sites/all/themes/corporateclean/images/logo.png" />
@@ -118,7 +118,7 @@ if($dirs[0]==".." || $dirs[1]=="..")
 <div class="container">
         <div class="row mt-5">
           <div class="col-12 text-center">
-           <a href="<?=$config['current_url']?>"> <img  class="img-fluid"src="http://www.alhidaaya.com/sw/sites/all/themes/corporateclean/images/logo.png" /></a>
+           <a href="<?= $config['current_url']?> "> <img  class="img-fluid" src="http://www.alhidaaya.com/sw/sites/all/themes/corporateclean/images/logo.png" /></a>
           </div>
         </div>
         <hr/>
@@ -242,7 +242,7 @@ $( document ).ready(function() {
 
   $('#folder_selection').change(function() {
                 // set the window's location property to the value of the option the user has selected
-                window.location =$(this).val();
+                window.location = $(this).val();
     });
 
 
@@ -251,7 +251,7 @@ $( document ).ready(function() {
      // get selection value
       var selectedType = $("#srcType").children("option:selected").val();
       //console.log(selectedType);
-      var q=$("#q").val();
+      var q = $("#q").val();
       //console.log(q);
       var param='?type='+selectedType+'&q='+q;
       window.location=param;
@@ -270,26 +270,27 @@ $( document ).ready(function() {
 
 
 
-   $.get("api.php",qs)
+   $.get("api.php", qs)
 
     .done(function(response){
       // contents are combination for folder and file sorted
-       let contents=[];
+       let contents = [];
+       console.log(response);
 
        // hold list of files
-       let files=[];
+       let files = [];
 
        //hold list of folders
-       let folders=[];
+       let folders = [];
 
-          //Try to get tbody first with jquery children. works faster!
-          var tbody = $('#list').children('tbody');
+        //Try to get tbody first with jquery children. works faster!
+        var tbody = $('#list').children('tbody');
 
         //Then if no tbody just select your table
         var table = tbody.length ? tbody : $('#list');
 
         if (isValidUrl(response)){
-                  data=response;
+                  data = response;
                  // console.log(data)
 
                   table.append(
@@ -309,23 +310,24 @@ $( document ).ready(function() {
         }
         else{
           // start
-                  data=JSON.parse(response);
-                  data=_.uniqBy(data,'loc');
+                 console.log(response);
+                  data = JSON.parse(response);
+                  data = _.uniqBy(data, 'loc');
 
 
 
                   // bellow loops separate files and folders
-                  for(i=0;i<data.length;i++){
+                  for(i=0; i<data.length; i++) {
 
-                      if (data[i].type === "file"){
+                      if (data[i].type === "file") {
 
                         //console.log(data[i]);
                         files.push(data[i]);
 
-                      }else if(data[i].type === "dir"){
+                      } else if(data[i].type === "dir") {
 
                           folders.push(data[i]);
-                          $("#folder_selection").append(   $('<option></option>').val('?dir='+data[i].loc).html(data[i].name) );
+                          $("#folder_selection").append($('<option></option>').val('?dir='+data[i].loc).html(data[i].name) );
 
                       }
                     }
@@ -334,43 +336,39 @@ $( document ).ready(function() {
                   contents=[...files,...folders];
                   //contents=_.uniqBy(contents,'loc');
 
-                  if(contents.length==0){
+                  if (contents.length == 0) { 
                     table.append(
                                 '<tr>'
                                 + '<td><h6 class="text-center"> No Result Found </h6> </td>'
                                 +'</tr>');
                   }
 
-                for(i=0;i<contents.length; i++){
+                for(i=0; i<contents.length; i++){
                   //console.log(data[i]);
                     //Add row
 
-                    if(qs['q']==="undefined")
+                    if(qs['q'] === "undefined")
                         contents[i].details="";
 
-                    if (contents[i].type==="dir"){
+                    if (contents[i].type === "dir") {
 
                         table.append(
                               '<tr>'
                               +'<td><img src="./assets/img/folder-icon.png"/> '
-                              +'<a href="'+'?dir='+contents[i].loc+'">'+contents[i].name+' </a></td>'
-                              +'<td class="float-right">'+contents[i].details+'</td>'
+                              +'<a href="'+'?dir='+ contents[i].loc +'">'+ contents[i].name +'</a></td>'
+                              +'<td class="float-right">'+ contents[i].details +'</td>'
                               +'</tr>');
                     }else
                     {
                       table.append(
                               '<tr>'
                               +'<td><img src="./assets/img/speaker-16.png"/> '
-                              +'<a href="'+'?file='+contents[i].loc+'">'+contents[i].name+' </a></td>'
-                              +'<td class="float-right">'+contents[i].details+'</td>'
+                              +'<a href="'+'?file='+ contents[i].loc +'">'+ contents[i].name +' </a></td>'
+                              +'<td class="float-right">'+ contents[i].details +'</td>'
                               +'</tr>');
                     }
-
                 }
-
-
             //end
-
           }// response type logic finished here
       }); // get here
   });
