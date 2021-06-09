@@ -1,5 +1,7 @@
 <?php
 
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 include "libs/audioInfo.php";
 
@@ -54,7 +56,7 @@ $content = []; // all file and folder list
 for($i=0; $i<$len; $i++) {
 
 	$content_name = $list[$i]; // name assigned from file and folder name
-	$current_content_location = $temp_dir.'/'.$content_name;  // we need to get content location also
+	$current_content_location = $temp_dir.'\\'.$content_name;  // we need to get content location also
 
 	if(is_dir($current_content_location)){
 		//bellow $fi to get file numbers
