@@ -4,14 +4,14 @@
 // remove /.. dots from file name [last parameter]
 function remove_dots($str)
 	{
-		$str = str_replace("/..","",$str,$num);
-		if($num == 1)
+		$str=str_replace("/..","",$str,$num);
+		if($num==1)
 			return $str;
 		else
-			return $str = str_replace("/.","",$str,$num);
+			return $str=str_replace("/.","",$str,$num);
 	}
 
-$exclude = $config["exclude"];
+$exclude=$config["exclude"];
 //https://stackoverflow.com/questions/20264737/php-list-directory-structure-and-exclude-some-directories
 	$filter = function ($file, $key, $iterator) use ($exclude) {
 	    if ($iterator->hasChildren() && !in_array($file->getFilename(), $exclude)) {
@@ -31,31 +31,32 @@ $iterator = new \RecursiveIteratorIterator(
 
 $files = [];
 
-$dirs = [];
+$dirs =[];
 
-$q = $_GET['q'];
+$q=$_GET['q'];
 
-$id = 1;
+$id=1;
 foreach ($iterator as $info)
 	 {
 
-			$c = $info->getPathname();// getPathname
-			$address = remove_dots($c); // address to build url
-			$c = str_replace("\\","/",$address);
+			$c=$info->getPathname();// getPathname
+			$address=remove_dots($c); // address to build url
+			$c=str_replace("\\","/",$address);
 
 
 
 
-			$name = explode("/",$c);// remove backslash from directory path
-			$name = end($name);
+			$name=explode("/",$c);// remove backslash from directory path
+			$name=end($name);
 
-			if (is_dir($c)) {
+			if(is_dir($c)){
 
-				if (preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/", $name, $match)) {
+				if(preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/",$name,$match))
+				{
 
 					$fi = new FilesystemIterator($c, FilesystemIterator::SKIP_DOTS);
 					//$dir[]=["name"=>"Raihan"];
-					$dirs = array_unique($dirs,SORT_REGULAR);
+					$dirs=array_unique($dirs,SORT_REGULAR);
 					$dirs[]=
 						[
 							"id"=>$id,
@@ -69,15 +70,16 @@ foreach ($iterator as $info)
 					}// preg match here
 				}
 
-			if (is_file($c)) {
+			if(is_file($c)){
 
-				if (preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/",$name,$match) && !in_array($name,$config["exclude"])) {
+				if(preg_match("/[a-z\d\s+]?($q)[a-z\d\s\.]?/",$name,$match) && !in_array($name,$config["exclude"]))
+				{
 
-					$files[] = 
+					$files[]=
 						[
-							"id" => $id,
-							"loc" => $c,
-							"name" => $name,
+							"id"=>$id,
+							"loc"=>$c,
+							"name"=>$name,
 							"type"=>"file",
 							"details"=>$audio->details($c)
 						];
@@ -86,30 +88,30 @@ foreach ($iterator as $info)
 			$id++;
 	}
 
-$json = [];
+$json=[];
 
-$files = array_unique($files,SORT_REGULAR);
-$dirs = array_unique($dirs,SORT_REGULAR);
+$files=array_unique($files,SORT_REGULAR);
+$dirs=array_unique($dirs,SORT_REGULAR);
 
-$folders = array_merge($dirs,[]);
+$folders=array_merge($dirs,[]);
 
-if( strcmp($_GET["type"],"folder") == 0)
+if( strcmp($_GET["type"],"folder")==0)
 	{
-		$json = $folders;
+		$json=$folders;
 
 	}
 
-if( strcmp($_GET["type"],"file") == 0)
+if( strcmp($_GET["type"],"file")==0)
 	{
-		$json = $files;
+		$json=$files;
 	}
 
 
- if( strcmp($_GET["type"], "filefolder") == 0)
+ if( strcmp($_GET["type"],"filefolder")==0)
  	{
-		$json = array_merge($folders, $files);
+		$json=array_merge($folders,$files);
 	}
-	// recursive convert array element into utf-8
+
 	array_walk_recursive(
 		$json,
 		function (&$entry) {
@@ -119,6 +121,6 @@ if( strcmp($_GET["type"],"file") == 0)
 		  );
 		}
 	  );
-$json = json_encode($json);
+$json=json_encode($json);
 header('Content-Type: application/json');
 echo $json;
