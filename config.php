@@ -13,6 +13,7 @@ $config['exclude'] = [
             ".git", "LICENSE", "README.md",
           ];
 
-$config["current_url"]="http://alhidaaya.com/swahili/duaa_adhkaar";
+#$config["current_url"]="http://alhidaaya.com/swahili/duaa_adhkaar";
+$config["current_url"]="http://localhost/web_player";
 
 ?>
