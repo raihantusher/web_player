@@ -89,6 +89,7 @@ for($i=0; $i<$len; $i++) {
 if($detect_search == 1) {
 	
    require "libs/dir-tree.php";
+  // echo $q;
 }
 else if(isset($_GET["file"])){
 	$actual_link = "http://$_SERVER[HTTP_HOST]";
@@ -104,7 +105,7 @@ else if(isset($_GET["file"])){
 		function (&$entry) {
 		  $entry = mb_convert_encoding(
 			  $entry,
-			  'UTF-8'
+			  'UTF-32'
 		  );
 		}
 	  );
