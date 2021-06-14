@@ -275,6 +275,7 @@ $( document ).ready(function() {
     .done(function(response){
       // contents are combination for folder and file sorted
        let contents = [];
+       console.log(response);
 
        // hold list of files
        let files = [];
@@ -309,7 +310,7 @@ $( document ).ready(function() {
         }
         else{
           // start
-          
+                 console.log(response);
                   data = response;
                   data = _.uniqBy(data, 'loc');
 
